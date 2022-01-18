@@ -17,6 +17,15 @@ router.route('/addPreferences')
                     return res.status(500).json("User Not Found");
                 }
                 else{
+                    for(let preference of preferences){
+                        var found_preference = await Category.findOne({"_id": preference._id});
+                        if(!found_preference){
+                            return res.status(500).json({
+                                "success": false,
+                                "message": "Provide preferences NOT Found"
+                            })
+                        }
+                    }
                     user.preferences = preferences;
                     var saved_user = await user.save();
                     if(!saved_user){
@@ -34,7 +43,6 @@ router.route('/addPreferences')
                 return res.status(500).json("Preferences are not in correct Format");
             }
         } catch (error) {
-            console.log(error);
             return res.status(500).json({
                 "error": error,
                 "probable_cause": "Category not defined"
@@ -54,11 +62,23 @@ router.route('/getPreferences/:user_id')
                 return res.status(500).json("User Not Found");
             }
             else{
+                var user_preferences = [];
+                for(let preference of user.preferences){
+                    try {
+                        var pref = await Category.findById(preference);
+                        user_preferences.push(pref);
+                    } catch (error) {
+                        return res.status(500).json({
+                            "success": false,
+                            "message": "InternalDB eror"
+                        })
+                    }
+                }
                 return res.status(200).json({
                     "success": true,
                     "user_id": user.id,
                     "mob": user.mob,
-                    "preferences": user.preferences
+                    "preferences": user_preferences
                 })
             }
         } catch (error) {

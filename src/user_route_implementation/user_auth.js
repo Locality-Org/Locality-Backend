@@ -3,7 +3,7 @@ const User = require('../../models/User_Model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-module.exports.register = (req, res, next) => {
+module.exports.register = async (req, res, next) => {
     try {
         const {mob_no,email,username,password} = req.body;
         if(mob_no.length !== 10){
@@ -15,31 +15,51 @@ module.exports.register = (req, res, next) => {
         var new_user = new User({
             mob:mob_no,email,username,password:hashed_password
         });
-        new_user.save((err, doc) => {
-            if(!err){
+        try {
+            var saved_user = await new_user.save();
+            if(!saved_user){
+                return res.status(500).json({
+                    "success": false,
+                    "message": "Internal error"
+                })
+            }
+            else{
                 return res.status(200).json({
                     "_id" : doc['_id'],
                     "token" : new_user.generateJwt()
                 })
             }
-            else{
-                if (err.code == 11000){
-                    if(User.findOne(user.username)){
-                        res.status(422).send(['Duplicate username found.']);
-                    }
-                    else{
-                        res.status(422).send(['Duplicate email found.']);
-                    }
+        
+        } catch (error) {
+            if (error.code == 11000){
+                if(User.findOne(new_user.mob)){
+                    res.status(422).json({
+                        "success": false,
+                        "message": "Duplicate mob_no found."
+                    });
+                }
+                else if(User.findOne(new_user.username)){
+                    res.status(422).json({
+                        "success": false,
+                        "message": "Duplicate Username found."
+                    });
                 }
                 else{
-                    console.log(err);
-                    return res.status(500).json(err);
+                    res.status(422).json({
+                        "success": false,
+                        "message": "Duplicate email found."
+                    });
                 }
             }
-        });
+            else{
+                console.log(error);
+                return res.status(500).json(error);
+            }
+        }
+        
     } catch (error) {
         console.log(error);
-        return res.staus(error.code).send(error);
+        return res.status(500).send(error);
     }
 }
 
@@ -56,6 +76,7 @@ module.exports.authenticate = async (req, res, next)=>{
             var is_password_correct = user.verifyPassword(password);
             if(is_password_correct){
                 return res.status(200).json({
+                    "success": true,
                     "token": user.generateJwt()
                 });
             }
