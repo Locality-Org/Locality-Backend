@@ -20,16 +20,14 @@ var UserSchema = new schema({
     },
     email: {
         type: String,
-        require: true,
         unique: true,
     },
     username: {
         type: String,
-        required: true,
     },
     password: {
         type: String,
-        required: true,
+        default: null
     },
     delivery_address: [
         {type: AddressSchema}

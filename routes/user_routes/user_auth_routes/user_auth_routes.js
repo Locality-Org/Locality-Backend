@@ -13,11 +13,28 @@ router.route('/login')
     });
 
 router.route('/signup')
+    .all(user_auth.verifyJwtToken)
     .get((req,res)=>{
         return res.json("SignUp Page GET Request");
     })
     .post(async (req,res,next)=>{
         user_auth.register(req,res,next);
+    })
+
+router.route('/sendOTP')
+    .get((req,res)=>{
+        return res.json("SendOTP Page GET Request");
+    })
+    .post(async (req,res,next)=>{
+        user_auth.sendOTP(req,res,next);
+    })
+
+router.route('/verifyOTP')
+    .get((req,res)=>{
+        return res.json("VerifyOTP Page GET Request");
+    })
+    .post(async (req,res,next)=>{
+        user_auth.verifyOTP(req,res,next);
     })
 
 
