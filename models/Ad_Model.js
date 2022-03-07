@@ -19,4 +19,4 @@ const AdSchema = new schema({
 	},
 });
 
-module.exports = mongoose.model('Category', AdSchema);
+module.exports = mongoose.model('Ad', AdSchema);
