@@ -50,6 +50,16 @@ const ShopSchema = new schema({
 		type: String,
 		required: false,
 	},
+	category: {
+		type: schema.Types.ObjectId,
+		ref: 'Category',
+		required: true,
+	},
+	subcategory: {
+		type: schema.Types.ObjectId,
+		ref: 'Category',
+		required: false,
+	},
 });
 
 module.exports = mongoose.model('Shop', ShopSchema);
