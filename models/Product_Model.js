@@ -2,44 +2,6 @@ const mongoose = require('mongoose');
 
 const schema = mongoose.Schema;
 
-const ReviewSchema = new schema({
-	user_name: {
-		type: String,
-		required: true,
-	},
-	description: {
-		type: String,
-		required: true,
-	},
-	media: [
-		{
-			type: String,
-			required: false,
-		},
-	],
-});
-
-const DiscountCouponSchema = new schema({
-	discount_percentage: {
-		type: Number,
-		required: true,
-		min: 0,
-		max: 100,
-	},
-	max_discount_rs: {
-		type: Number,
-		required: false,
-	},
-	min_order_value: {
-		type: Number,
-		required: false,
-	},
-	code: {
-		type: String,
-		required: true,
-	},
-});
-
 const ProductSchema = new schema({
 	name: {
 		type: String,
@@ -62,6 +24,16 @@ const ProductSchema = new schema({
 		type: Number,
 		required: true,
 	},
+	category: {
+		type: schema.Types.ObjectId,
+		ref: 'Category',
+		required: true,
+	},
+	subcategory: {
+		type: schema.Types.ObjectId,
+		ref: 'Category',
+		required: true,
+	},
 	seller: {
 		type: schema.Types.ObjectId,
 		ref: 'Shop',
@@ -69,12 +41,16 @@ const ProductSchema = new schema({
 	},
 	reviews: [
 		{
-			type: ReviewSchema,
+			type: schema.Types.ObjectId,
+			ref: 'Review',
+			required: false,
 		},
 	],
 	discount_coupons: [
 		{
-			type: DiscountCouponSchema,
+			type: schema.Types.ObjectId,
+			ref: 'DiscountCoupon',
+			required: false,
 		},
 	],
 	size: {
