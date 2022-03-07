@@ -14,6 +14,7 @@ router.route('/get_category/:catId').get(async (req, res) => {
 				message: 'No category was found!',
 			});
 		}
+
 		const _ads = await Ad.find({
 			$and: [
 				{
@@ -24,6 +25,7 @@ router.route('/get_category/:catId').get(async (req, res) => {
 				},
 			],
 		});
+
 		const _response = {
 			trending_subcategories: [], // TODO: Implement logic
 			subcategories: _category.subcategories.map((_cat) => ({
@@ -53,7 +55,8 @@ router.route('/get_subCategory/:catId').get(async (req, res) => {
 				message: 'No subcategory was found!',
 			});
 		}
-		const _ads = await Ad.find({
+		const _products = Product.find({ subcategory: _subcategory._id }).populate('seller', '_id name location ratings');
+		const _ads = Ad.find({
 			$and: [
 				{
 					section: 'Category',
@@ -63,10 +66,24 @@ router.route('/get_subCategory/:catId').get(async (req, res) => {
 				},
 			],
 		});
+		await Promise.all([_products, _ads]);
+
 		const _response = {
-			// TODO: Implement after shop and store API is complete
-			popular_products: [],
-			products: [],
+			popular_products: [], // TODO: Implement logic
+			products: _products.map((_item) => ({
+				id: _item._id,
+				name: _item.name,
+				image: _item.image,
+				ratings: _item.ratings,
+				discount: _item.discount,
+				price: _item.price,
+				seller: {
+					id: _item.seller._id,
+					name: _item.seller.name,
+					location: _item.seller.location,
+					ratings: _item.seller.ratings,
+				},
+			})),
 			ads: _ads.map((_ad) => ({ media: _ad.media })),
 		};
 		return res.status(200).json(_response);
@@ -86,6 +103,7 @@ router.route('/get_shop/:shopId').get(async (req, res) => {
 				message: 'No shop was found!',
 			});
 		}
+
 		const _products = Product.find({ seller: _shop._id });
 		const _ads = Ad.find({
 			$and: [
@@ -101,13 +119,15 @@ router.route('/get_shop/:shopId').get(async (req, res) => {
 
 		const _response = {
 			shop_details: {
+				id: _shop._id,
+				name: _shop.name,
 				mob: _shop.mobile,
 				instagram: _shop.instagram,
 				facebook: _shop.facebook,
 				website: _shop.website,
-				name: _shop.name,
 				address: _shop.address,
 				location: _shop.location,
+				ratings: _shop.ratings,
 			},
 			popular_products: [], // TODO: Implement logic
 			products: _products.map((_item) => ({
@@ -117,12 +137,6 @@ router.route('/get_shop/:shopId').get(async (req, res) => {
 				ratings: _item.ratings,
 				discount: _item.discount,
 				price: _item.price,
-				seller: {
-					id: _shop._id,
-					name: _shop.name,
-					location: _shop.location,
-					ratings: _shop.ratings,
-				},
 			})),
 			ads: _ads.map((_ad) => ({ media: _ad.media })),
 		};
