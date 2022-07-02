@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const User = require('../../models/User_Model');
+const User = require('../models/User_Model');
 const jwt = require('jsonwebtoken');
 
 module.exports.verifyAdminJwtToken = (req, res, next) => {

@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
-const User = require('../../models/User_Model');
-const OTP =  require('../../models/OTP_Model');
+const User = require('../models/User_Model');
+const OTP =  require('../models/OTP_Model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const otpGenerator = require('otp-generator');
 const CryptoJS = require('crypto-js');
 const { vary } = require('express/lib/response');
+const fbAdmin = require('../config/Firebase-OTP-jwt/firebase-otp-jwt-config');
+
 
 // Twilio
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -33,34 +35,91 @@ var generateJwt = function (_id, mob) {
 
 module.exports.register = async (req, res, next) => {
     try {
-        const {mob,email,username} = req.body;
+        const {mob,email,username, profilePicture, preferences, isEmailVerified, userId} = req.body;
+        if(!mob){
+            return res.status(500).json({
+                success: false,
+                errorCode: 541,
+                message: "Enter a valid Mobile Number"
+            });
+        }
+        
         if(mob.length !== 10){
             return res.status(500).json("Enter a valid 10 digit mob no.")
         }
-        
-        var user = await User.findOne({mob: mob});
-        if(!user){
-            return res.status(422).json({
-                "success": false,
-                "message": "Mob Number not verified."
+        if(!email){
+            return res.status(500).json({
+                success: false,
+                errorCode: 542,
+                message: "Enter a valid Email ID"
             });
         }
-        if(user.email || user.username){
+        if(!preferences){
+            return res.status(500).json({
+                success: false,
+                errorCode: 543,
+                message: "Enter Valid Preferences"
+            });
+        }
+        if(!isEmailVerified){
+            return res.status(500).json({
+                success: false,
+                errorCode: 544,
+                message: "Enter isEmailVerified Status"
+            });
+        }
+        if(!username){
+            return res.status(500).json({
+                success: false,
+                errorCode: 545,
+                message: "Enter valid Username"
+            });
+        }
+        if(!userId){
+            return res.status(500).json({
+                success: false,
+                errorCode: 546,
+                message: "Enter User ID"
+            });
+        }
+        
+        var user = await User.findOne({mob: mob});
+        if(user){
             return res.status(500).json({
                 "success": false,
+                errorCode: 441,
                 "message": "Account already exist with this Mobile number. Please try to LogIn"
             })
         }
-        user.email = email;
-        user.username = username;
+
         try {
-            var saved_user = await user.save();
-            if(!saved_user){
-                return res.status(500).json({
-                    "success": false,
-                    "message": "Internal DB error. Restart the Process"
-                })
+            var savedUser = await new User({
+                userId: userId,
+                mob: mob,
+                email: email,
+                isEmailVerified: isEmailVerified,
+                username: username,
+                profilePicture: profilePicture ?  profilePicture : null,
+                preferences: preferences
+            }).save();
+            if(savedUser){
+                return res.status(200).json(savedUser);
             }
+            return res.status(500).json({
+                errorCode: 505
+            })
+        } catch (error) {
+            return res.status(500).json({
+                errorCode: 500,
+                error: error
+            })
+        }
+        
+
+        try {
+            var newUser = await new User({
+                        mob: mob
+                    }).save();
             return res.status(200).json({
                 "success": true,
                 "is_otp_verified": true,
@@ -114,32 +173,20 @@ module.exports.authenticate = async (req, res, next)=>{
     }
 };
 
-module.exports.verifyJwtToken = (req, res, next) => {
-    var token;
-    if ('authorization' in req.headers)
-        token = req.headers['authorization'].split(' ')[1];
+module.exports.verifyJwtToken = async (req, res, next) => {
 
-    if (!token)
-        return res.status(403).send({ auth: false, message: 'No token provided.' });
-    else {
-        jwt.verify(token, process.env.JWT_SECRET,
-            (err, decoded) => {
-                if (err){
-                    console.log(err);
-                    return res.status(500).send({ auth: false, message: 'Token authentication failed.' });
-                }
-                else {
-                    if(decoded._id == (req.body.user_id)?req.body.user_id:req.params.user_id){
-                        next();
-                    }
-                    else{
-                        return res.status(500).json("Token Tampering");
-                    }
-                    
-                }
-            }
-        )
+    const token = req.headers.authorization.split(' ')[1];
+    try {
+        const decodeValue = await admin.auth().verifyIdToken(token);
+        if (decodeValue) {
+            req.user = decodeValue;
+            return next();
+        }
+        return res.json({ message: 'Un authorize' });
+    } catch (e) {
+        return res.json({ message: 'Internal Error' });
     }
+
 }
 
 module.exports.sendOTP = async (req, res, next) => {
@@ -360,5 +407,68 @@ module.exports.verifyOTP = async (req, res, next) => {
     } catch (error) {
         console.log(error);
         return res.status(500).send(error);
+    }
+}
+
+module.exports.verifyFBToken = async(req,res,next) => {
+    try {
+        var token = req.headers.authorization.split(' ')[1];
+        const decodeValue = await fbAdmin.auth().verifyIdToken(token);
+        if (decodeValue) {
+            console.log(decodeValue);
+            return res.status(200).json({
+                success: true,
+                user_id: decodeValue.user_id,
+                phone_number: decodeValue.phone_number
+            });
+        }
+        return res.json({ 
+            message: 'Un authorize', 
+            errorCode: 527,
+        });
+    } catch (e) {
+        if(e.codePrefix === 'auth'){
+            console.log(e);
+            return res.json({ 
+                message: 'Internal Error' ,
+                errorCode: 427,
+                codePrefix: e.codePrefix
+            });
+        }
+        console.log("Error without Auth : ",e)
+        return res.json({ 
+            message: 'Internal Error' ,
+            error: e,
+            errorCode: 500
+        });
+    }
+}
+
+module.exports.verifyFBTokenMiddleWare = async(req,res,next) => {
+    try {
+        var token = req.headers.authorization.split(' ')[1];
+        const decodeValue = await fbAdmin.auth().verifyIdToken(token);
+        if (decodeValue) {
+            return next();
+        }
+        return res.json({ 
+            message: 'Un authorize', 
+            errorCode: 527,
+        });
+    } catch (e) {
+        if(e.codePrefix === 'auth'){
+            console.log(e);
+            return res.json({ 
+                message: 'Internal Error' ,
+                errorCode: 427,
+                codePrefix: e.codePrefix
+            });
+        }
+        console.log("Error without Auth : ",e);
+        return res.json({ 
+            message: 'Internal Error' ,
+            error: e,
+            errorCode: 500
+        });
     }
 }
