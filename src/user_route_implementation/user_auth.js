@@ -36,7 +36,7 @@ var generateJwt = function (_id, mob) {
 module.exports.register = async (req, res, next) => {
     try {
         const {mob,email,username, profilePicture, preferences, isEmailVerified, userId} = req.body;
-        if(!mob){
+        if(mob == undefined){
             return res.status(500).json({
                 success: false,
                 errorCode: 541,
@@ -47,35 +47,35 @@ module.exports.register = async (req, res, next) => {
         if(mob.length !== 10){
             return res.status(500).json("Enter a valid 10 digit mob no.")
         }
-        if(!email){
+        if(email == undefined){
             return res.status(500).json({
                 success: false,
                 errorCode: 542,
                 message: "Enter a valid Email ID"
             });
         }
-        if(!preferences){
+        if(preferences == undefined){
             return res.status(500).json({
                 success: false,
                 errorCode: 543,
                 message: "Enter Valid Preferences"
             });
         }
-        if(!isEmailVerified){
+        if(isEmailVerified == undefined){
             return res.status(500).json({
                 success: false,
                 errorCode: 544,
                 message: "Enter isEmailVerified Status"
             });
         }
-        if(!username){
+        if(username == undefined){
             return res.status(500).json({
                 success: false,
                 errorCode: 545,
                 message: "Enter valid Username"
             });
         }
-        if(!userId){
+        if(userId == undefined){
             return res.status(500).json({
                 success: false,
                 errorCode: 546,
@@ -90,6 +90,15 @@ module.exports.register = async (req, res, next) => {
                 errorCode: 441,
                 "message": "Account already exist with this Mobile number. Please try to LogIn"
             })
+        }
+
+        user = await User.findOne({email: email});
+        if(user){
+            return res.status(500).json({
+                "success": false,
+                errorCode: 442,
+                "message": "Account already exist with this Email ID. Please try to LogIn"
+            });
         }
 
         try {
