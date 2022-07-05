@@ -11,45 +11,46 @@ router.route('/getUserDetails')
         userRouteImplementation.getUserDetails(req,res,next);
     })
     .post(async (req,res,next)=>{
-        try {
-            var preferences = req.body.preferences;
-            if(Array.isArray(preferences)){
-                var user = await User.findOne({"_id": req.body.user_id});
-                if(!user){
-                    return res.status(500).json("User Not Found");
-                }
-                else{
-                    for(let preference of preferences){
-                        var found_preference = await Category.findOne({"_id": preference._id});
-                        if(!found_preference){
-                            return res.status(500).json({
-                                "success": false,
-                                "message": "Provide preferences NOT Found"
-                            })
-                        }
-                    }
-                    user.preferences = preferences;
-                    var saved_user = await user.save();
-                    if(!saved_user){
-                        return res.status(500).json("Database error. Unable to save User Data");
-                    }
-                    else{
-                        return res.status(200).json({
-                            "success": true,
-                            "preference_saved": true
-                        });
-                    }
-                }
-            }
-            else{
-                return res.status(500).json("Preferences are not in correct Format");
-            }
-        } catch (error) {
-            return res.status(500).json({
-                "error": error,
-                "probable_cause": "Category not defined"
-            });
-        }
+        userRouteImplementation.getUserDetails(req,res,next);
+        // try {
+        //     var preferences = req.body.preferences;
+        //     if(Array.isArray(preferences)){
+        //         var user = await User.findOne({"_id": req.body.user_id});
+        //         if(!user){
+        //             return res.status(500).json("User Not Found");
+        //         }
+        //         else{
+        //             for(let preference of preferences){
+        //                 var found_preference = await Category.findOne({"_id": preference._id});
+        //                 if(!found_preference){
+        //                     return res.status(500).json({
+        //                         "success": false,
+        //                         "message": "Provide preferences NOT Found"
+        //                     })
+        //                 }
+        //             }
+        //             user.preferences = preferences;
+        //             var saved_user = await user.save();
+        //             if(!saved_user){
+        //                 return res.status(500).json("Database error. Unable to save User Data");
+        //             }
+        //             else{
+        //                 return res.status(200).json({
+        //                     "success": true,
+        //                     "preference_saved": true
+        //                 });
+        //             }
+        //         }
+        //     }
+        //     else{
+        //         return res.status(500).json("Preferences are not in correct Format");
+        //     }
+        // } catch (error) {
+        //     return res.status(500).json({
+        //         "error": error,
+        //         "probable_cause": "Category not defined"
+        //     });
+        // }
     });
 
 router.route('/getAllCategories')
@@ -58,45 +59,46 @@ router.route('/getAllCategories')
         userRouteImplementation.getAllCategories(req,res,next);
     })
     .post(async (req,res,next)=>{
-        try {
-            var preferences = req.body.preferences;
-            if(Array.isArray(preferences)){
-                var user = await User.findOne({"_id": req.body.user_id});
-                if(!user){
-                    return res.status(500).json("User Not Found");
-                }
-                else{
-                    for(let preference of preferences){
-                        var found_preference = await Category.findOne({"_id": preference._id});
-                        if(!found_preference){
-                            return res.status(500).json({
-                                "success": false,
-                                "message": "Provide preferences NOT Found"
-                            })
-                        }
-                    }
-                    user.preferences = preferences;
-                    var saved_user = await user.save();
-                    if(!saved_user){
-                        return res.status(500).json("Database error. Unable to save User Data");
-                    }
-                    else{
-                        return res.status(200).json({
-                            "success": true,
-                            "preference_saved": true
-                        });
-                    }
-                }
-            }
-            else{
-                return res.status(500).json("Preferences are not in correct Format");
-            }
-        } catch (error) {
-            return res.status(500).json({
-                "error": error,
-                "probable_cause": "Category not defined"
-            });
-        }
+        userRouteImplementation.getAllCategories(req,res,next);
+        // try {
+        //     var preferences = req.body.preferences;
+        //     if(Array.isArray(preferences)){
+        //         var user = await User.findOne({"_id": req.body.user_id});
+        //         if(!user){
+        //             return res.status(500).json("User Not Found");
+        //         }
+        //         else{
+        //             for(let preference of preferences){
+        //                 var found_preference = await Category.findOne({"_id": preference._id});
+        //                 if(!found_preference){
+        //                     return res.status(500).json({
+        //                         "success": false,
+        //                         "message": "Provide preferences NOT Found"
+        //                     })
+        //                 }
+        //             }
+        //             user.preferences = preferences;
+        //             var saved_user = await user.save();
+        //             if(!saved_user){
+        //                 return res.status(500).json("Database error. Unable to save User Data");
+        //             }
+        //             else{
+        //                 return res.status(200).json({
+        //                     "success": true,
+        //                     "preference_saved": true
+        //                 });
+        //             }
+        //         }
+        //     }
+        //     else{
+        //         return res.status(500).json("Preferences are not in correct Format");
+        //     }
+        // } catch (error) {
+        //     return res.status(500).json({
+        //         "error": error,
+        //         "probable_cause": "Category not defined"
+        //     });
+        // }
     });
 
 router.route('/addPreferences')
