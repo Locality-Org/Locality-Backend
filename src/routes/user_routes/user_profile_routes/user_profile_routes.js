@@ -8,7 +8,8 @@ const userRouteImplementation = require('../../../user_route_implementation/user
 router.route('/getUserDetails')
     .all(user_auth.verifyFBTokenMiddleWare)
     .get((req,res,next)=>{
-        userRouteImplementation.getUserDetails(req,res,next);
+        // userRouteImplementation.getUserDetails(req,res,next);
+        return resstatus(200).json('getUserDetails GET Request');
     })
     .post(async (req,res,next)=>{
         userRouteImplementation.getUserDetails(req,res,next);
@@ -56,7 +57,8 @@ router.route('/getUserDetails')
 router.route('/getAllCategories')
     .all(user_auth.verifyFBTokenMiddleWare)
     .get((req,res,next)=>{
-        userRouteImplementation.getAllCategories(req,res,next);
+        // userRouteImplementation.getAllCategories(req,res,next);
+        return resstatus(200).json('getAllCategories GET Request');
     })
     .post(async (req,res,next)=>{
         userRouteImplementation.getAllCategories(req,res,next);
