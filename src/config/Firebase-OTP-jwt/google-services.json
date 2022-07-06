@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "705265139527",
+    "project_id": "rush-ddb92",
+    "storage_bucket": "rush-ddb92.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705265139527:android:8525d6fc402c1282ca9662",
+        "android_client_info": {
+          "package_name": "com.example.rush"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705265139527-h9akvih16m0u2gme02rv2jddue26grc2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rush",
+            "certificate_hash": "0f651d2c51f83107c794340041f70bc0695b119f"
+          }
+        },
+        {
+          "client_id": "705265139527-s4u6uhb25j6g8b7sbcart58odbkmatsu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rush",
+            "certificate_hash": "8da1f74c31bab7a4cd8c6e5ce28d9837e29fbf07"
+          }
+        },
+        {
+          "client_id": "705265139527-jq90asfk9d9uo38i6pd9f0jli3a8s678.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOqYZbo7KnYSwq5SsUI8jzU_kO_yf2xow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705265139527-jq90asfk9d9uo38i6pd9f0jli3a8s678.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

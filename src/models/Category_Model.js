@@ -11,13 +11,13 @@ var CategorySchema = new schema({
 	},
 	image: {
 		type: String,
-		required: true,
 		default: null,
 	},
 	subcategories: [
 		{
 			type: SubCategorySchema,
-		},
+			default: null
+		}
 	]
 })
 

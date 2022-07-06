@@ -57,11 +57,11 @@ router.route('/getUserDetails')
 router.route('/getAllCategories')
     .all(user_auth.verifyFBTokenMiddleWare)
     .get((req,res,next)=>{
-        // userRouteImplementation.getAllCategories(req,res,next);
-        return resstatus(200).json('getAllCategories GET Request');
+        userRouteImplementation.getAllCategories(req,res,next);
+        
     })
     .post(async (req,res,next)=>{
-        userRouteImplementation.getAllCategories(req,res,next);
+        return res.status(200).json('getAllCategories POST Request');
         // try {
         //     var preferences = req.body.preferences;
         //     if(Array.isArray(preferences)){

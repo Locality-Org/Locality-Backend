@@ -13,7 +13,13 @@ router.route('/verifyFBToken')
     .post((req,res,next)=>{
         user_auth.verifyFBToken(req,res,next);
     });
-
+router.route('/verifyAdminFBToken')
+    .get((req,res)=>{
+        res.json("verifyFBToken GET Request");
+    })
+    .post((req,res,next)=>{
+        user_auth.verifyAdminFBToken(req,res,next);
+    });
 router.route('/login')
     .all(user_auth.verifyFBTokenMiddleWare)
     .get((req,res)=>{
