@@ -51,6 +51,10 @@ app.use('/auth', auth_routes);
 const vendor_auth_routes = require('./src/routes/vendor_routes/vendor_auth_routes/vendor_auth_routes');
 app.use('/vendorauth', vendor_auth_routes);
 
+//Configure Vendor Routes
+const vendor_routes = require('./src/routes/vendor_routes/vendor_profile_routes/vendor_profile_routes');
+app.use('/vendor', vendor_routes);
+
 // Configure User Routes
 const user_routes = require('./src/routes/user_routes/user_profile_routes/user_profile_routes');
 const user_auth = require('./src/user_route_implementation/user_auth')
