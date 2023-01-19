@@ -60,6 +60,9 @@ const user_routes = require('./src/routes/user_routes/user_profile_routes/user_p
 const user_auth = require('./src/user_route_implementation/user_auth')
 app.use('/user', user_routes);
 
+// Configure Category Routes for vendor
+const vendorretailRoutes = require('./src/routes/vendor_routes/vendorRetailRoutes');
+app.use('/vendor/retail', vendorretailRoutes);
 
 // Configure Category Routes
 const retailRoutes = require('./src/routes/user_routes/userRetailRoutes');

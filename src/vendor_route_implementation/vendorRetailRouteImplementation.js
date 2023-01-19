@@ -4,8 +4,8 @@ const Product = require('../models/ProductModel');
 const Shop = require('../models/ShopModel');
 const User = require('../models/User_Model');
 
-module.exports.getCategory = async(req,res) => {
-    try {
+module.exports.getCategory = async (req, res) => {
+	try {
 		const _category = await Category.findById(req.params.catId).populate('subcategories');
 		if (!_category) {
 			return res.status(404).json({
@@ -45,8 +45,8 @@ module.exports.getCategory = async(req,res) => {
 	}
 }
 
-module.exports.getSubCategory = async(req, res) => {
-    try {
+module.exports.getSubCategory = async (req, res) => {
+	try {
 		const _subcategory = await Category.exists({ id: req.params.catId });
 		if (!_subcategory) {
 			return res.status(404).json({
@@ -93,8 +93,8 @@ module.exports.getSubCategory = async(req, res) => {
 	}
 }
 
-module.exports.getShop = async(req, res) => {
-    try {
+module.exports.getShop = async (req, res) => {
+	try {
 		const _shop = await Shop.findById(req.params.shopId).populate('address');
 		if (!_shop) {
 			return res.status(404).json({
@@ -147,8 +147,8 @@ module.exports.getShop = async(req, res) => {
 	}
 }
 
-module.exports.getProductDetails = async(req, res) => {
-    try {
+module.exports.getProductDetails = async (req, res) => {
+	try {
 		const _product = await Product.findById(req.params.prodId)
 			.populate('seller', '_id name location ratings address')
 			.populate('reviews')
@@ -208,6 +208,34 @@ module.exports.getProductDetails = async(req, res) => {
 			ads: _ads.map((_ad) => ({ media: _ad.media })),
 		};
 		return res.status(200).json(_response);
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({
+			error: error,
+		});
+	}
+}
+
+//adding a new product
+module.exports.addProduct = async (req, res) => {
+	try {
+		const product = new Product({
+			name: req.body.name,
+			image: req.body.image,
+			ratings: req.body.ratings,
+			discount: req.body.discount,
+			price: req.body.price,
+			category: req.body.category,
+			subcategory: req.body.subcategory,
+			seller: req.body.seller,
+			reviews: req.body.reviews,
+			size: req.body.size,
+			variations: req.body.variations,
+			description_list: req.body.description_list
+		});
+
+		const savedProduct = await product.save();
+		return res.status(200).json(savedProduct);
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({
