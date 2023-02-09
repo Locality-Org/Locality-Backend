@@ -9,7 +9,7 @@ router.route('/getUserDetails')
     .all(user_auth.verifyFBTokenMiddleWare)
     .get((req, res, next) => {
         // userRouteImplementation.getUserDetails(req,res,next);
-        return resstatus(200).json('getUserDetails (Vendor) GET Request');
+        return res.status(200).json('getUserDetails (Vendor) GET Request');
     })
     .post(async (req, res, next) => {
         userRouteImplementation.getUserDetails(req, res, next);
