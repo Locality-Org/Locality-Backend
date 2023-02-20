@@ -35,7 +35,7 @@ var generateJwt = function (_id, mob) {
 
 module.exports.register = async (req, res, next) => {
     try {
-        const { mob, email, username, profilePicture, preferences, isEmailVerified, userId, businessName, address, city, state, pin, GSTIN } = req.body;
+        const { mob, email, username, profilePicture, preferences, isEmailVerified, userId, businessName, address, GSTIN } = req.body;
         if (mob == undefined) {
             return res.status(500).json({
                 success: false,
@@ -47,32 +47,32 @@ module.exports.register = async (req, res, next) => {
         if (mob.length !== 10) {
             return res.status(500).json("Enter a valid 10 digit mob no.")
         }
-        if (email == undefined) {
-            return res.status(500).json({
-                success: false,
-                errorCode: 542,
-                message: "Enter a valid Email ID"
-            });
-        }
-        if (preferences == undefined) {
-            return res.status(500).json({
-                success: false,
-                errorCode: 543,
-                message: "Enter Valid Preferences"
-            });
-        }
-        if (isEmailVerified == undefined) {
-            return res.status(500).json({
-                success: false,
-                errorCode: 544,
-                message: "Enter isEmailVerified Status"
-            });
-        }
-        if (username == undefined) {
+        // if (email == undefined) {
+        //     return res.status(500).json({
+        //         success: false,
+        //         errorCode: 542,
+        //         message: "Enter a valid Email ID"
+        //     });
+        // }
+        // if (preferences == undefined) {
+        //     return res.status(500).json({
+        //         success: false,
+        //         errorCode: 543,
+        //         message: "Enter Valid Preferences"
+        //     });
+        // }
+        // if (isEmailVerified == undefined) {
+        //     return res.status(500).json({
+        //         success: false,
+        //         errorCode: 544,
+        //         message: "Enter isEmailVerified Status"
+        //     });
+        // }
+        if (businessName == undefined) {
             return res.status(500).json({
                 success: false,
                 errorCode: 545,
-                message: "Enter valid Username"
+                message: "Enter valid business name"
             });
         }
         if (userId == undefined) {
@@ -112,9 +112,6 @@ module.exports.register = async (req, res, next) => {
                 preferences: preferences,
                 businessName: businessName,
                 address: address,
-                city: city,
-                state: state,
-                pin: pin,
                 GSTIN: GSTIN
             }).save();
             if (savedUser) {

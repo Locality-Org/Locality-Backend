@@ -31,15 +31,6 @@ var VendorSchema = new schema({
         required: true,
         type: String,
     },
-    city: {
-        type: String,
-    },
-    state: {
-        type: String,
-    },
-    pin: {
-        type: String,
-    },
     GSTIN: {
         type: String,
     },

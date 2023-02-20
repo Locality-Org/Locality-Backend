@@ -6,22 +6,25 @@ module.exports = new Schema({
 	city: {
 		type: String,
 	},
+	state: {
+		type: String,
+	},
 	street: {
 		type: String,
 	},
 	houseNumber: {
 		type: String,
 	},
-    PIN: {
-        type: Number,
+	PIN: {
+		type: Number,
 		required: true,
 		min: 100000,
 		max: 999999,
-    },
-    Landmark: {
-        type: String,
-    },
-    description: {
-        type: String
-    }
+	},
+	Landmark: {
+		type: String,
+	},
+	description: {
+		type: String
+	}
 });
