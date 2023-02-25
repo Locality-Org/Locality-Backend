@@ -7,10 +7,14 @@ const ProductSchema = new schema({
 		type: String,
 		required: true,
 	},
-	image: {
+	product_brand: {
+		type: String,
+		required: true,
+	},
+	image: [{
 		type: String,
 		required: false,
-	},
+	}],
 	ratings: {
 		type: Number,
 		required: false,
@@ -34,9 +38,9 @@ const ProductSchema = new schema({
 		ref: 'Category',
 		required: true,
 	},
-	seller: {
+	vendor: {
 		type: schema.Types.ObjectId,
-		ref: 'Shop',
+		ref: 'Vendor',
 		required: true,
 	},
 	reviews: [
@@ -46,26 +50,26 @@ const ProductSchema = new schema({
 			required: false,
 		},
 	],
-    size: {
+	size: {
 		type: String,
 		required: false,
 	},
-	variations: [
-		{
-			size: {
-				type: String,
-				required: true,
-			},
-			price: {
-				type: Number,
-				required: true,
-			},
-			discount: {
-				type: Number,
-				required: false,
-			},
-		},
-	],
+	// variations: [
+	// 	{
+	// 		size: {
+	// 			type: String,
+	// 			required: true,
+	// 		},
+	// 		price: {
+	// 			type: Number,
+	// 			required: true,
+	// 		},
+	// 		discount: {
+	// 			type: Number,
+	// 			required: false,
+	// 		},
+	// 	},
+	// ],
 	description_list: [
 		{
 			heading: {
