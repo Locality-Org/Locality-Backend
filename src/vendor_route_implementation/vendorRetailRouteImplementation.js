@@ -221,16 +221,16 @@ module.exports.addProduct = async (req, res) => {
 	try {
 		const product = new Product({
 			name: req.body.name,
+			product_brand: req.body.product_brand,
 			image: req.body.image,
 			ratings: req.body.ratings,
 			discount: req.body.discount,
 			price: req.body.price,
 			category: req.body.category,
 			subcategory: req.body.subcategory,
-			seller: req.body.seller,
+			vendor: req.body.vendor,
 			reviews: req.body.reviews,
 			size: req.body.size,
-			variations: req.body.variations,
 			description_list: req.body.description_list
 		});
 
