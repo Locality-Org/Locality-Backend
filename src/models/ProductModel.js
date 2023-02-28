@@ -33,11 +33,11 @@ const ProductSchema = new schema({
 		ref: 'Category',
 		required: true,
 	},
-	subcategory: {
-		type: schema.Types.ObjectId,
-		ref: 'Category',
-		required: true,
-	},
+	// subcategory: {
+	// 	type: schema.Types.ObjectId,
+	// 	ref: 'Category',
+	// 	required: true,
+	// },
 	vendor: {
 		type: schema.Types.ObjectId,
 		ref: 'Vendor',

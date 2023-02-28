@@ -35,7 +35,7 @@ var generateJwt = function (_id, mob) {
 
 module.exports.register = async (req, res, next) => {
     try {
-        const { mob, email, username, profilePicture, preferences, isEmailVerified, userId, businessName, address, GSTIN } = req.body;
+        const { mob, email, category, username, profilePicture, preferences, isEmailVerified, userId, businessName, address, GSTIN } = req.body;
         if (mob == undefined) {
             return res.status(500).json({
                 success: false,
@@ -106,6 +106,7 @@ module.exports.register = async (req, res, next) => {
                 userId: userId,
                 mob: mob,
                 email: email,
+                category: category,
                 isEmailVerified: isEmailVerified,
                 username: username,
                 profilePicture: profilePicture ? profilePicture : null,

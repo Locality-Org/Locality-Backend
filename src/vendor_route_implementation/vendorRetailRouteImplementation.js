@@ -227,7 +227,7 @@ module.exports.addProduct = async (req, res) => {
 			discount: req.body.discount,
 			price: req.body.price,
 			category: req.body.category,
-			subcategory: req.body.subcategory,
+			// subcategory: req.body.subcategory,
 			vendor: req.body.vendor,
 			reviews: req.body.reviews,
 			size: req.body.size,

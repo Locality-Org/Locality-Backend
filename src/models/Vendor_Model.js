@@ -20,6 +20,11 @@ var VendorSchema = new schema({
         required: true,
         unique: true,
     },
+    category: {
+        type: schema.Types.ObjectId,
+        ref: 'Category',
+        required: true,
+    },
     email: {
         type: String,
         unique: true,

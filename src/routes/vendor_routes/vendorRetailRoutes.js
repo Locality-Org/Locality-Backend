@@ -14,6 +14,7 @@ router.route('/getSubCategory/:catId')
         userRetailRouteImplementation.getSubCategory(req, res);
     });
 
+//TODO: remove this route
 router.route('/getShop/:shopId')
     .all(user_auth.verifyFBTokenMiddleWare)
     .get(async (req, res) => {
